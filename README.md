@@ -7,7 +7,7 @@ Solana是一个高性能的区块链平台，专为快速、安全的去中心�
 1. **安装Solana CLI**：
    - 对于Linux和macOS用户，打开终端并运行以下命令：
      ```bash
-     sh -c "$(curl -sSfL https://release.solana.com/v1.10.32/install)"
+     sh -c "$(curl -sSfL https://release.solana.com/stable/install)"
      ```
    - 对于Windows用户，需要使用PowerShell，并运行类似的命令。
 
