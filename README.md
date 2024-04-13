@@ -70,3 +70,67 @@ Citations:
 [6] https://github.com/solana-labs/example-helloworld/blob/master/README_ZH_CN.md
 [7] https://blog.csdn.net/qq_33781658/article/details/124426067
 [8] https://foresightnews.pro/article/detail/53408
+
+
+-----
+
+Solana Playground是一个基于浏览器的集成开发环境（IDE），允许开发者快速开发、部署和测试Solana程序。以下是使用Solana Playground进行开发的基本步骤，主要基于QuickNode提供的指南和Solana Playground的官方文档。
+
+### 创建你的第一个Anchor程序
+
+#### 初始化项目
+1. 访问[Solana Playground](https://beta.solpg.io/)，点击“Create a new project”。
+2. 输入项目名称，例如“Hello World”，选择“Anchor (Rust)”作为项目类型。
+3. 点击“Create”按钮，Solana Playground将初始化你的项目。
+
+#### 创建和连接钱包
+- Solana Playground允许创建一个“一次性”钱包，也可以导入自己的钱包。点击浏览器窗口左下角的红点（显示为“Not connected”），Solana Playground将为你生成一个钱包，你可以选择保存以备后用。
+
+#### 编写Hello World程序
+- 打开`lib.rs`文件，从`declare_id!`语句后的第7行开始，删除默认文本。
+- 使用以下代码编写你的Hello World程序：
+  ```rust
+  use anchor_lang::prelude::*;
+
+  declare_id!("11111111111111111111111111111111");
+
+  #[program]
+  mod hello_world {
+      use super::*;
+      pub fn say_hello(_ctx: Context<SayHello>) -> Result<()> {
+          msg!("Hello World!");
+          Ok(())
+      }
+  }
+
+  #[derive(Accounts)]
+  pub struct SayHello {}
+  ```
+
+#### 编译和部署程序
+- 点击屏幕左侧的🔧Build图标以编译代码并检查错误。
+- 部署到Devnet，点击页面左侧的工具图标🛠，然后点击“Deploy”。
+
+#### 从客户端调用程序
+- 在“Files”标签页下，展开‘client’切换并打开`client.ts`文件。
+- 使用TypeScript编写一个简单的函数来调用`say_hello`函数，并发送交易到网络。
+
+### 互动与测试
+- Solana Playground提供了一个客户端部分，允许你直接从同一窗口与程序互动。
+- 你可以通过编写客户端代码来测试程序的功能。
+
+### 注意事项
+- 每次部署后，你的Playground钱包余额会发生变化。Solana Playground默认会自动请求SOL空投，以确保你的钱包有足够的SOL来覆盖交易费用。
+- 如果需要更多SOL，可以在playground终端中输入空投命令：`solana airdrop 2`。
+
+通过以上步骤，你可以成功地设置、构建和部署一个Solana程序，并使用JavaScript与链上程序互动。这为Solana开发提供了一个简便、无需安装任何软件的方法，特别适合Windows用户开始Solana开发[1][2][3][4][8]。
+
+Citations:
+[1] https://www.quicknode.com/guides/solana-development/anchor/how-to-write-your-first-anchor-program-in-solana-part-1
+[2] https://www.anchor-lang.com/docs/solana-playground
+[3] https://docs.solana.com/getstarted/hello-world
+[4] https://solana.com/developers/guides
+[5] https://www.youtube.com/watch?v=_vQ3bSs3svs
+[6] https://www.youtube.com/watch?v=QX51QqYpwjg
+[7] https://beta.solpg.io/tutorials
+[8] https://beta.solpg.io
