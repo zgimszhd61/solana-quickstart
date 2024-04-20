@@ -189,3 +189,120 @@ Citations:
 [6] https://www.youtube.com/watch?v=QX51QqYpwjg
 [7] https://beta.solpg.io/tutorials
 [8] https://beta.solpg.io
+
+
+这段代码是一个使用 Anchor 框架编写的 Solana 程序的基础示例，它展示了如何定义一个简单的 `say_hello` 函数，该函数在被调用时输出 "Hello World!" 消息。Anchor 是一个流行的 Solana 开发框架，它提供了 Rust 的强类型支持和一些便利的功能来简化开发。
+
+下面是如何扩展这个基本示例，并包含一些其他常用的 Anchor 特性和 Solana 编程概念：
+
+### 添加计数器功能
+
+你可以扩展这个程序来包含一个简单的计数器，记录 `say_hello` 函数被调用的次数。
+
+```rust
+use anchor_lang::prelude::*;
+
+declare_id!("FzVTBMVjELRe2HmT6bftcGxw7W4ubHU5B28xrFRYZGrs");
+
+#[program]
+mod hello_world {
+    use super::*;
+    pub fn say_hello(ctx: Context<SayHello>) -> Result<()> {
+        let counter = &mut ctx.accounts.counter;
+        counter.count += 1; // 增加计数器
+        msg!("Hello World! Count: {}", counter.count);
+        Ok(())
+    }
+}
+
+#[derive(Accounts)]
+pub struct SayHello<'info> {
+    #[account(mut)]
+    pub counter: Account<'info, Counter>,
+}
+
+#[account]
+pub struct Counter {
+    pub count: u64,
+}
+```
+
+### 添加资金管理功能
+
+在 Solana 上，你可以通过 `system_program` 创建和管理账户的资金。以下示例展示如何接收一定量的 SOL 并将其存储在合约中：
+
+```rust
+use anchor_lang::prelude::*;
+use anchor_lang::solana_program::system_program;
+
+declare_id!("FzVTBMVjELRe2HmT6bftcGxw7W4ubHU5B28xrFRYZGrs");
+
+#[program]
+mod hello_world {
+    use super::*;
+    pub fn receive_and_store_sol(ctx: Context<StoreSol>, amount: u64) -> Result<()> {
+        let account = &mut ctx.accounts.my_account;
+        **account.to_account_info().lamports.borrow_mut() += amount;
+        msg!("Received and stored {} SOL in the contract!", lamports_to_sol(amount));
+        Ok(())
+    }
+}
+
+#[derive(Accounts)]
+pub struct StoreSol<'info> {
+    #[account(mut)]
+    pub my_account: Account<'info, AccountData>,
+    /// CHECK: Just a check
+    pub system_program: AccountInfo<'info>,
+}
+
+#[account]
+pub struct AccountData {
+    // Additional data can be stored here
+}
+
+fn lamports_to_sol(lamports: u64) -> f64 {
+    lamports as f64 / 1_000_000_000.0
+}
+```
+
+### 处理错误
+
+在更复杂的应用中，处理错误变得非常重要。以下是如何在你的程序中优雅地处理错误：
+
+```rust
+use anchor_lang::prelude::*;
+
+declare_id!("FzVTBMVjELRe2HmT6bftcGxw7W4ubHU5B28xrFRYZGrs");
+
+#[program]
+mod hello_world {
+    use super::*;
+    pub fn do_something_risky(ctx: Context<RiskyOperation>) -> Result<()> {
+        if ctx.accounts.random_account.data == "risky" {
+            err!(ErrorCode::RiskyOperationFailed)
+        } else {
+            msg!("Operation succeeded!");
+            Ok(())
+        }
+    }
+}
+
+#[derive(Accounts)]
+pub struct RiskyOperation<'info> {
+    pub random_account: Account<'info, RandomData>,
+}
+
+#[account]
+pub struct RandomData {
+    pub data: String,
+}
+
+#[error_code]
+pub enum ErrorCode {
+    #[msg("The operation failed because it was too risky.")]
+    RiskyOperationFailed,
+}
+```
+
+这些示例展示了一些基本的 Anchor 功能，可帮助你开始编写更复杂的 Solana 程序。每个示例都着重展示了不同的编程概念，从简单的状态管理到错误处理，以及如何与系统程序交互。这些都是构建实际应用程序时可能会用到的重要技能。
