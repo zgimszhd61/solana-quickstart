@@ -1,5 +1,7 @@
 Solana是一个高性能的区块链平台，专为快速、安全的去中心化应用程序和市场而设计。如果你是Solana编程的新手，以下是一个简单的快速入门教程，帮助你开始在Solana上开发。
 
+- https://beta.solpg.io/
+
 ### 环境设置
 
 首先，你需要设置Solana的开发环境。这包括安装Solana命令行工具（CLI）和Rust编程语言，因为Solana智能合约通常使用Rust编写。
